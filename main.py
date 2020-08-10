@@ -1,25 +1,29 @@
 import pygame as pg
 pg.font.init()
-# import neat
 
 import os, sys, random
 
+# Initialise Global Constants
 WIN_WIDTH = 500
 WIN_HEIGHT = 800
 
 FLOOR = 600
 
+# Load Images, Scale them and Store in Global Variables
 BIRD_IMGS = [pg.transform.scale2x(pg.image.load(os.path.join("imgs", "bird1.png"))), pg.transform.scale2x(pg.image.load(os.path.join("imgs", "bird2.png"))), pg.transform.scale2x(pg.image.load(os.path.join("imgs", "bird3.png")))]
 PIPE_IMG = pg.transform.scale2x(pg.image.load(os.path.join("imgs", "pipe.png")))
 BASE_IMG = pg.transform.scale2x(pg.image.load(os.path.join("imgs", "base.png")))
 BG_IMGS = pg.transform.scale2x(pg.image.load(os.path.join("imgs", "bg.png")))
 
+# Fonts Variable
 STATS_FONT = pg.font.SysFont("comicsans", 50)
 
+# Initialise Pygame Window
 WIN = pg.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
 pg.display.set_caption("Flappy Bird")
 
 
+# Bird Class
 class Bird:
 	IMGS = BIRD_IMGS
 	MAX_ROTATION = 40
@@ -37,23 +41,23 @@ class Bird:
 		self.img = self.IMGS[0]
 
 	def jump(self):
-		self.velocity = -9.5
+		self.velocity = -10 # (Negative) For Going Up
 		self.tick_count = 0
 		self.height = self.y
 
 	def move(self):
 		self.tick_count += 1
 
-		d = self.velocity * self.tick_count + 1.5 * self.tick_count**2
+		displacement = self.velocity * self.tick_count + 1.5 * self.tick_count**2 # Formula for calculating displacement
 
-		if d >= 16:
-			d = 16
+		if displacement >= 16:
+			displacement = 16
 
-		if d < 0 :
-			d -= 2
-		self.y = self.y + d
+		if displacement < 0 :
+			displacement -= 2
+		self.y = self.y + displacement 
 
-		if d < 0 or self.y < self.height + 50:
+		if displacement < 0 or self.y < self.height + 50:
 			if self.tilt < self.MAX_ROTATION:
 				self.tilt = self.MAX_ROTATION
 
